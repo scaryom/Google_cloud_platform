@@ -1,0 +1,32 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: pod2
+  labels:
+    name: nginx
+spec:
+  containers:
+  - name: nginx-image
+    image: nginx 
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
+
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-pod2
+  labels:
+    name: pod2
+spec:
+  selector:
+    app: pod2
+  ports:
+  - port: 80
+    targetPort: 80

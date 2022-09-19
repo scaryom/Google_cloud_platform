@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: deployment 
+metadata:
+   - name: multiplecontainers
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: deplo-1
+  template:
+    metadata:
+      labels:
+          app: deplo1
+    spec:
+      containers:
+        - name: ngnix-image
+          image: ngnix:1.6
+          ports:
+            - containerPort: 8001
+        - name: dbserver
+          image: mysql-3.2
+          ports: 
+            - containerPort: 8002
+

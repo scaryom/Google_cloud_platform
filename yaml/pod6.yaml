@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: memr-demo
+  labels:
+    app: memr 
+spec:
+  containers:
+    - name: mem-demo-ctr 
+      image: polinux/stress
+      resources:
+        requests:
+          memory: "200Mi"
+        limits:
+          memory: "200Mi"
+      command: ["stress"]
+      args: ["--vm-bytes","1","200M","--vm-hang","1"]

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: pod1
+  namespace: test
+spec:
+  containers:
+    - name: testpod
+      image: nginx 
+      ports:
+        - containerPort: 8080
+      resources:
+        requests:
+          cpu: "0.6"
+          memory: "128Mi"
+        limits:
+          cpu: "0.6"
+          memory: "128Mi" 
+      volumeMounts:
+        - name: ngnixstorage
+          mountPath: "/data"
+  volumes:
+    - name: ngnixstorage
+      emptyDir: {}
+        
+        
