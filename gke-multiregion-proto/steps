@@ -1,0 +1,55 @@
+Enabling the APIs : We will first enable few APIs for our project that we are going to use by executing below command
+
+gcloud services enable \
+    multiclusteringress.googleapis.com \
+    gkehub.googleapis.com \
+    container.googleapis.com \
+    --project=<<your_gcp_project_id>>
+    
+Fetch the Kubernetes cluster credentials
+gcloud container clusters get-credentials <<kubernetes_cluster_name_output_from_gke_primary>> \
+    --zone=europe-west4 \
+    --project=<<your_gcp_project_id>>
+gcloud container clusters get-credentials <<kubernetes_cluster_name_output_from_gke_secondary>> \
+    --zone=europe-west2 \
+    --project=<<your_gcp_project_id>>
+    
+Update kubectl context for simplicity (optional)
+    
+    kubectl config rename-context gke_<<your_gcp_project_id>>_europe-west4_<<kubernetes_cluster_name_output_from_gke_primary>> gke_pri
+    kubectl config rename-context gke_<<your_gcp_project_id>>_europe-west2_<<kubernetes_cluster_name_output_from_gke_secondary>> gke_sec
+    
+Register our clusters to Fleet
+
+gcloud container fleet memberships register gke-pri-fleet \
+    --gke-cluster europe-west4/<<kubernetes_cluster_name_output_from_gke_primary>> \
+    --enable-workload-identity \
+    --project=<<your_gcp_project_id>>
+gcloud container fleet memberships register gke-sec-fleet \
+    --gke-cluster europe-west2/kubernetes_cluster_name_output_from_gke_secondary>> \
+    --enable-workload-identity \
+    --project=<<your_gcp_project_id>>
+    
+Enable Ingress on Primary Fleet
+
+gcloud container fleet ingress enable \
+   --config-membership=gke-pri-fleet
+   
+Sample Application Deployment — Kubernetes YAML Files Deployment
+kubectl config use-context gke_pri
+kubectl apply -f namespace.yaml
+kubectl apply -f deployment.yaml 
+
+kubectl config use-context gke_sec
+ubectl apply -f namespace.yaml
+kubectl apply -f deployment.yaml
+
+kubectl config use-context gke_pri
+kubectl apply -f mcs.yaml
+kubectl apply -f mci.yaml
+
+kubectl describe mci whereami-ingress -n multi-region-test
+
+curl http://<<VIP_IP>>/ping
+
+#https://faun.pub/deploy-active-active-multi-region-kubernetes-cluster-with-terraform-f2652e43f47e
