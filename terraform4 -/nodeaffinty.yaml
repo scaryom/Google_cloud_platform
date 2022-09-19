@@ -1,0 +1,17 @@
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: affinity-pod
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: type 
+                operator: In 
+                values:
+                  - gke-cluster-test 
+  containers:
+    - name: nginxcont
+      image: nginx

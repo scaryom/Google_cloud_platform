@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: scheduled-pod
+spec:
+  nodeName: gke-pras-1213-cluster--pras-1213-np-1-e1c34a0e-bmpn
+  containers:
+    - name: nginxcont
+      image: nginx 
+#  nodeSelector:
+#    type: gke-cluster-test
+
