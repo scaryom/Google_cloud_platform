@@ -9,8 +9,8 @@ terraform {
 }
 
 provider "google" {
-    region = "asia-south1"
-      project     = "omprakash-37246"
-  credentials = file("omprakash-37246-c0bf75ffce90.json")
+    region = "location"
+      project     = "project_id"
+  credentials = file("service_file")
   
 }
